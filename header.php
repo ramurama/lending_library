@@ -12,11 +12,12 @@
     <link href="assets/css/custom.css" rel="stylesheet" />
      <!-- GOOGLE FONTS-->
    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-   <link href="assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" />
+   <!-- <link href="assets/plugins/datepicker/datepicker3.css" rel="stylesheet" /> -->
+   <link rel="stylesheet" href="assets/plugins/jQueryUI/jquery-ui.min.css">
 
 </head>
 <body>
-    
+
     <div id="wrapper">
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="adjust-nav">
@@ -30,11 +31,11 @@
                         <!--img src="assets/img/logo.png" /-->
                         <h3 style="color:#fff;">LENDING LIBRARY MANAGEMENT</h3>
                     </a>
-                    
+
                 </div>
-              
+
                 <span class="logout-spn" >
-                  <a href="#" style="color:#fff;"></a>  
+                  <a href="#" style="color:#fff;"></a>
 
                 </span>
             </div>

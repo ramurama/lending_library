@@ -32,7 +32,7 @@ if(mysqli_num_rows($result) > 0) {
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>S.No</th><th>Book Name</th><th>Author Name</th><th>Book's Old Number</th><th>Action</th>
+                            <th>Book ID</th><th>Book Name</th><th>Author Name</th><th>Book's Old Number</th><th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="books_table">
@@ -40,7 +40,7 @@ if(mysqli_num_rows($result) > 0) {
                         $count = 1; 
                         foreach ($booksData as $value){
                             echo '<tr>';
-                            echo '<td>' . $count++ . '</td>';
+                            echo '<td>' . $value['book_id'] . '</td>';
                             echo '<td>' . $value['book_name'] . '</td>';
                             echo '<td>' . $value['author_name'] . '</td>';
                             echo '<td>' . $value['old_number'] . '</td>';
@@ -86,6 +86,7 @@ if(mysqli_num_rows($result) > 0) {
                 <select class="form-control required" name="category" id="category">
                     <option value="new">New</option>
                     <option value="old">Old</option>
+                    <option value="magazine">Magazine</option>
                 <select>
             </div>
             <div class="form-group col-lg-6">
@@ -143,6 +144,7 @@ if(mysqli_num_rows($result) > 0) {
                 <select class="form-control required" name="edit_category" id="edit_category">
                     <option value="new">New</option>
                     <option value="old">Old</option>
+                    <option value="magazine">Magazine</option>
                 <select>
             </div>
             <div class="form-group col-lg-6">
@@ -151,7 +153,7 @@ if(mysqli_num_rows($result) > 0) {
             </div>
             <div class="form-group col-lg-6">
                 <label>Old Number </label>
-                <input type="text" class="form-control required" name="edit_old_number" id="edit_old_number" />
+                <input type="text" class="form-control" name="edit_old_number" id="edit_old_number" />
             </div>
             <div class="form-group col-lg-6">
                 <label>Multiple </label><br />

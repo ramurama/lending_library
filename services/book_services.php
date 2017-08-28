@@ -50,10 +50,11 @@ function addBookToDb(){
 	$oldNumber = mysqli_real_escape_string($dbc, trim($_POST["oldNumber"]));
 	$isMultiple = mysqli_real_escape_string($dbc, trim($_POST["isMultiple"]));
 	
-	$query = "INSERT INTO $table_name (book_name, author_name, old_number, book_rate, is_multiple, book_category) VALUES ('$bookName', '$authorName', '$oldNumber', '$rate', '$isMultiple', '$category')";
+	$query = "INSERT INTO $table_name (book_name, author_name, old_number, book_rate, is_multiple, book_category, book_language) VALUES ('$bookName', '$authorName', '$oldNumber', '$rate', '$isMultiple', '$category', '$language')";
 
 	if(mysqli_query($dbc, $query)){
-		$output = array("infocode" => "INSERTSUCCESS", "message" => "New book added successfully.");
+		$book_id = mysqli_insert_id($dbc);
+		$output = array("infocode" => "INSERTSUCCESS", "message" => "New book added successfully.<br>Book ID : $book_id", "book_id" => $book_id);
 	}else{
 		$output = array("infocode" => "INSERTFAILURE", "message" => "New book not added!");
 	}
@@ -75,21 +76,21 @@ function getBookDetailsFromDb(){
 	$result = mysqli_query($dbc, $query);
 	if(mysqli_num_rows($result) > 0){
 		$row = mysqli_fetch_assoc($result);
-		$output = array("book_name" => $row['book_name'], "author_name" => $row['author_name'], "rate" => $row['book_rate'], "old_number" => $row['old_number'], "is_multiple" => $row['is_multiple'], "category" => $row['book_category']);
+		$output = array("book_name" => $row['book_name'], "author_name" => $row['author_name'], "rate" => $row['book_rate'], "old_number" => $row['old_number'], "is_multiple" => $row['is_multiple'], "category" => $row['book_category'], "book_language" => $row['book_language']);
 	}
 	return $output;
 }
 
 function searchBooks(){
 	global $dbc;
-	$query = "(SELECT * FROM tamil_books WHERE book_name LIKE '%{$_POST['bookName']}%' ORDER BY book_id DESC LIMIT 5 ) UNION (SELECT * FROM english_books WHERE book_name LIKE '%{$_POST['bookName']}%' ORDER BY book_id DESC LIMIT 5)";
+	$query = "(SELECT * FROM tamil_books WHERE book_name LIKE '%{$_POST['bookName']}%' OR book_id LIKE '%{$_POST['bookName']}%' OR old_number LIKE '%{$_POST['bookName']}%' ORDER BY book_id DESC LIMIT 5 ) UNION (SELECT * FROM english_books WHERE book_name LIKE '%{$_POST['bookName']}%' OR book_id LIKE '%{$_POST['bookName']}%' OR old_number LIKE '%{$_POST['bookName']}%' ORDER BY book_id DESC LIMIT 5)";
 	$result = mysqli_query($dbc, $query);
 	$output = '';
 	if(mysqli_num_rows($result) > 0){
 		$count = 1;
 		while ($row = mysqli_fetch_array($result)){
 			$output .= '<tr>' 
-			. '<td>' . $count++ . '</td>'
+			. '<td>' . $row['book_id'] . '</td>'
 			. '<td>' . $row['book_name'] . '</td>'
 			. '<td>' . $row['author_name'] . '</td>'
 			. '<td>' . $row['old_number'] . '</td>'
@@ -121,7 +122,7 @@ function updateBookInDb(){
 	$oldNumber = mysqli_real_escape_string($dbc, trim($_POST["oldNumber"]));
 	$isMultiple = mysqli_real_escape_string($dbc, trim($_POST["isMultiple"]));
 
-	$query = "UPDATE $table_name SET book_name='$bookName', author_name='$authorName', book_category='$category', book_rate='$rate', old_number='$oldNumber', is_multiple='$isMultiple' WHERE book_id='$bookId'";
+	$query = "UPDATE $table_name SET book_name='$bookName', author_name='$authorName', book_category='$category', book_rate='$rate', old_number='$oldNumber', is_multiple='$isMultiple', book_language='$language' WHERE book_id='$bookId'";
 
 	if(mysqli_query($dbc, $query)){
 		$output = array("infocode" => "UPDATESUCCESS", "message" => "Book updated successfully.");

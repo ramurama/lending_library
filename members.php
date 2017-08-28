@@ -10,7 +10,8 @@ if(mysqli_num_rows($result) > 0) {
      'member_name'=>$row['member_name'],
      'phone_number' => $row['phone_number'],
      'join_date'=> $row['join_date'],
-     'member_id' => $row['member_id']
+     'member_id' => $row['member_id'],
+     'renewal_date' => $row['renewal_date']
      );
  }
 }
@@ -42,17 +43,18 @@ if(mysqli_num_rows($result) > 0) {
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Member ID</th><th>Member Name</th><th>Phone Number</th><th>Member since</th><th>Action</th>
+                            <th>Member ID</th><th>Member Name</th><th>Phone Number</th><th>Member since</th><th>Renewal Date</th><th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="members_table">
                         <?php
                         foreach ($membersData as $value){
                             echo '<tr>';
-                            echo '<td>' . $value['member_id'] . '</td>';
+                            echo '<td>' . str_pad($value['member_id'],4,0,STR_PAD_LEFT) . '</td>';
                             echo '<td>' . $value['member_name'] . '</td>';
                             echo '<td>' . $value['phone_number'] . '</td>';
                             echo '<td>' . $value['join_date'] . '</td>';
+                            echo '<td>' . $value['renewal_date'] . '</td>';
                             echo '<td>' . '<button type="button" onclick="viewMember(\''. $value['member_id'] .'\')" class="btn btn-warning"><i class="fa fa-edit"></i></button> <button type="button" class="btn btn-danger" onclick="deleteMember(\''. $value['member_id'] .'\')"><i class="fa fa-close"></i>' . '</td>';
                             echo '</tr>';
                         }
@@ -99,6 +101,10 @@ if(mysqli_num_rows($result) > 0) {
                 <label>Joining Date </label>
                 <input type="text" class="form-control datepick required" name="joining_date" id="joining_date" />
             </div>
+            <div class="form-group col-lg-6">
+                <label>Renewal Date </label>
+                <input type="text" class="form-control datepick required" name="renewal_date" id="renewal_date" />
+            </div>
         </form>
       </div>
       <div class="clearfix"></div>
@@ -144,6 +150,10 @@ if(mysqli_num_rows($result) > 0) {
             <div class="form-group col-lg-6">
                 <label>Joining Date </label>
                 <input type="text" class="form-control datepick required" name="edit_joining_date" id="edit_joining_date"  />
+            </div>
+            <div class="form-group col-lg-6">
+                <label>Renewal Date </label>
+                <input type="text" class="form-control datepick required" name="edit_renewal_date" id="edit_renewal_date" />
             </div>
         </form>
       </div>

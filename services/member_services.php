@@ -43,8 +43,10 @@ function addMemberToDb(){
 	$membershipAmount = mysqli_real_escape_string($dbc, trim($_POST["membershipAmount"]));
 	$joiningDate = mysqli_real_escape_string($dbc, trim($_POST["joiningDate"]));
 	$joiningDate =  date("Y-m-d", strtotime( $joiningDate ) );
+	$renewalDate = mysqli_real_escape_string($dbc, trim($_POST["renewalDate"]));
+	$renewalDate =  date("Y-m-d", strtotime( $renewalDate ) );
 	
-	$query = "INSERT INTO members (member_name, phone_number, address, deposit_amount, membership_amount, join_date) VALUES ('$memberName', '$phoneNumber', '$address', '$depositAmount', '$membershipAmount', '$joiningDate')";
+	$query = "INSERT INTO members (member_name, phone_number, address, deposit_amount, membership_amount, join_date, renewal_date) VALUES ('$memberName', '$phoneNumber', '$address', '$depositAmount', '$membershipAmount', '$joiningDate', '$renewalDate')";
 
 	if(mysqli_query($dbc, $query)){
 		$output = array("infocode" => "INSERTSUCCESS", "message" => "New member added successfully.");
@@ -56,16 +58,19 @@ function addMemberToDb(){
 
 function searchMembers(){
 	global $dbc;
-	$query = "SELECT * FROM members WHERE member_name  Like '%{$_POST['memberName']}%' LIMIT 10";
+	$memberName = mysqli_real_escape_string($dbc, trim($_POST["memberName"]));
+	$memberId = intval($memberName);
+	$query = "SELECT * FROM members WHERE member_name  LIKE '%{$memberName}%' OR member_id LIKE '%{$memberId}%' LIMIT 10";
 	$result = mysqli_query($dbc, $query);
 	$output = '';
 	if(mysqli_num_rows($result) > 0){
 		while ($row = mysqli_fetch_array($result)){
 			$output .= '<tr>' 
-			. '<td>' . $row['member_id'] . '</td>'
+			. '<td>' . str_pad($row['member_id'],4,0,STR_PAD_LEFT) . '</td>'
 			. '<td>' . $row['member_name'] . '</td>'
 			. '<td>' . $row['phone_number'] . '</td>'
 			. '<td>' . $row['join_date'] . '</td>'
+			. '<td>' . $row['renewal_date'] . '</td>'
 			.  '<td>' . '<button type="button" onclick="viewMember(\''. $row['member_id'] .'\')" class="btn btn-warning"><i class="fa fa-edit"></i></button> <button type="button" onclick="deleteMember(\''. $row['member_id'] .'\')" class="btn btn-danger"><i class="fa fa-close"></i></button>' . '</td>'
 			. '</tr>';
 		}	
@@ -85,7 +90,7 @@ function getMemberDetailsFromDb(){
 	$result = mysqli_query($dbc, $query);
 	if(mysqli_num_rows($result) > 0){
 		$row = mysqli_fetch_assoc($result);
-		$output = array("member_name" => $row['member_name'], "phone_number" => $row['phone_number'], "address" => $row['address'], "deposit_amount" => $row['deposit_amount'], "membership_amount" => $row['membership_amount'], "join_date" => $row['join_date']);
+		$output = array("member_name" => $row['member_name'], "phone_number" => $row['phone_number'], "address" => $row['address'], "deposit_amount" => $row['deposit_amount'], "membership_amount" => $row['membership_amount'], "join_date" => $row['join_date'], "renewal_date" => $row['renewal_date']);
 	}
 	return $output;
 }
@@ -100,8 +105,10 @@ function updateMemberInDb(){
 	$membershipAmount = mysqli_real_escape_string($dbc, trim($_POST["membershipAmount"]));
 	$joiningDate = mysqli_real_escape_string($dbc, trim($_POST["joiningDate"]));
 	$joiningDate =  date("Y-m-d", strtotime( $joiningDate ) );
+	$renewalDate = mysqli_real_escape_string($dbc, trim($_POST["renewalDate"]));
+	$renewalDate =  date("Y-m-d", strtotime( $renewalDate ) );
 
-	$query = "UPDATE members SET member_name='$memberName', phone_number='$phoneNumber', address='$address', deposit_amount='$depositAmount', membership_amount='$membershipAmount', join_date='$joiningDate' WHERE member_id='$memberId'";
+	$query = "UPDATE members SET member_name='$memberName', phone_number='$phoneNumber', address='$address', deposit_amount='$depositAmount', membership_amount='$membershipAmount', join_date='$joiningDate', renewal_date = '$renewalDate' WHERE member_id='$memberId'";
 
 	if(mysqli_query($dbc, $query)){
 		$output = array("infocode" => "UPDATESUCCESS", "message" => "Member updated successfully.");

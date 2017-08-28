@@ -6,8 +6,9 @@ function addMember() {
     var depositAmount = document.getElementById('deposit_amount').value;
     var membershipAmount = document.getElementById('membership_amount').value;
     var joiningDate = document.getElementById('joining_date').value;
+    var renewalDate = document.getElementById('renewal_date').value;
 
-    var data = "memberName=" + memberName + "&phoneNumber=" + phoneNumber + "&address=" + address + "&depositAmount=" + depositAmount + "&membershipAmount=" + membershipAmount + "&joiningDate=" + joiningDate + "&action=add_member"; 
+    var data = "memberName=" + memberName + "&phoneNumber=" + phoneNumber + "&address=" + address + "&depositAmount=" + depositAmount + "&membershipAmount=" + membershipAmount + "&joiningDate=" + joiningDate + "&renewalDate=" + renewalDate + "&action=add_member"; 
 
     $.ajax({
       type: "POST",
@@ -46,6 +47,7 @@ function viewMember(memberId){
           $('#edit_deposit_amount').val(result.deposit_amount);
           $('#edit_membership_amount').val(result.membership_amount);
           $('#edit_joining_date').val(result.join_date);
+          $('#edit_renewal_date').val(result.renewal_date);
           $('#editmember_modal').modal('show');
       }         
   });
@@ -75,8 +77,9 @@ function updateMember(){
     var depositAmount = document.getElementById('edit_deposit_amount').value;
     var membershipAmount = document.getElementById('edit_membership_amount').value;
     var joiningDate = document.getElementById('edit_joining_date').value;
+    var renewalDate = document.getElementById('edit_renewal_date').value;
 
-    var data = "memberId=" + memberId + "&memberName=" + memberName + "&phoneNumber=" + phoneNumber + "&address=" + address + "&depositAmount=" + depositAmount + "&membershipAmount=" + membershipAmount + "&joiningDate=" + joiningDate + "&action=update_member"; 
+    var data = "memberId=" + memberId + "&memberName=" + memberName + "&phoneNumber=" + phoneNumber + "&address=" + address + "&depositAmount=" + depositAmount + "&membershipAmount=" + membershipAmount + "&joiningDate=" + joiningDate  + "&renewalDate=" + renewalDate + "&action=update_member"; 
 
     $.ajax({
       url: "services/member_services.php",

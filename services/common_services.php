@@ -28,7 +28,10 @@ function search_member()
 	if($searchField==''){
 		$output=array('infocode' => "NODATAFOUND");	
 	} else {
-		$query="SELECT * FROM members WHERE member_name LIKE '%{$_POST['searchField']}%' LIMIT 10";	
+		$memberName = mysqli_real_escape_string($dbc, trim($_POST["searchField"]));
+		$memberId = intval($memberName);
+		$query = "SELECT * FROM members WHERE member_name  LIKE '%{$memberName}%' OR member_id LIKE '%{$memberId}%' LIMIT 10";
+		//$query="SELECT * FROM members WHERE member_id LIKE '%{$_POST['searchField']}%' LIMIT 10";	
 		$result=mysqli_query($dbc,$query);
 		if(mysqli_num_rows($result)>0)
 		{
@@ -56,8 +59,9 @@ function search_book()
 	if($searchField==''){
 		$output=array('infocode' => "NODATAFOUND");	
 	} else {
-		$query="(SELECT * FROM english_books WHERE book_name LIKE '%{$_POST['searchField']}%' LIMIT 5) 
-				UNION (SELECT * FROM tamil_books WHERE book_name LIKE '%{$_POST['searchField']}%' LIMIT 5)";	
+		$input_data = mysqli_real_escape_string($dbc, trim($_POST["searchField"]));
+		$query="(SELECT * FROM english_books WHERE book_id LIKE '%{$input_data}%' OR book_name LIKE '%{$input_data}%' OR old_number LIKE '%{$input_data}%' LIMIT 5) 
+				UNION (SELECT * FROM tamil_books WHERE book_id LIKE '%{$input_data}%' OR book_name LIKE '%{$input_data}%' OR old_number LIKE '%{$input_data}%' LIMIT 5)";	
 		$result=mysqli_query($dbc,$query);
 		if(mysqli_num_rows($result)>0)
 		{
@@ -75,22 +79,4 @@ function search_book()
 	return $output;
 }
 
-function customeridsession()
-{
-	global $dbc;
-    $output = array();
-	
-	$customer_id=$_POST['customer_id'];
-	$_SESSION['customer_id']=$customer_id;	
-	
-	$query="SELECT first_name,last_name FROM customer WHERE customer_id='".$_SESSION['customer_id']."'";
-	$result=mysqli_query($dbc,$query);
-	$row=mysqli_fetch_assoc($result);
-	
-	$_SESSION['firstname'] = $row['first_name']." ".$row['last_name'];	
-	
-	$output=array('infocode'=>'SETTED');	
-	
-	return $output;
-}
 
